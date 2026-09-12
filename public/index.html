@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Transforme links longos em URLs simples de compartilhar.">
+    <title>Encurtalink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Encurtalink, início"><span class="brand-mark">↗</span> encurtalink</a>
+        <span class="status"><span></span> serviço online</span>
+      </header>
+
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">Compartilhe o que importa.</h1>
+        <p class="intro">Cole uma URL longa e transforme-a em um endereço limpo, rápido e pronto para circular.</p>
+        <form id="shorten-form" class="shorten-form">
+          <label class="sr-only" for="url">URL para encurtar</label>
+          <input id="url" name="url" type="url" placeholder="https://seu-link-longo.com/..." autocomplete="url" required>
+          <button type="submit"><span>Encurtar link</span> <b>↗</b></button>
+        </form>
+        <p id="form-message" class="form-message" role="status"></p>
+      </section>
+
+      <section id="result" class="result" hidden aria-live="polite">
+        <div>
+          <p class="result-label">Seu link está pronto</p>
+          <a id="short-url" class="short-url" href="#" target="_blank" rel="noopener"></a>
+        </div>
+        <button id="copy-button" class="copy-button" type="button">Copiar <span>⌘ C</span></button>
+      </section>
+
+      <footer class="footer"><span>Feito para links que merecem chegar mais longe.</span><span class="footer-dot">●</span><span>rápido · direto · seu</span></footer>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
