@@ -3,3 +3,4 @@ data/links.json
 .env
 .DS_Store
 __pycache__/
+data/
