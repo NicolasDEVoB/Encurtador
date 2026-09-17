@@ -2,6 +2,7 @@ const form = document.querySelector('#shorten-form');
 const input = document.querySelector('#url');
 const message = document.querySelector('#form-message');
 const result = document.querySelector('#result');
+const resultLabel = result.querySelector('.result-label');
 const shortUrl = document.querySelector('#short-url');
 const copyButton = document.querySelector('#copy-button');
 
@@ -17,6 +18,7 @@ form.addEventListener('submit', async (event) => {
     const response = await fetch('/api/links', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: input.value }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || 'Não foi possível encurtar este link.');
+    resultLabel.textContent = data.message || 'Seu link está pronto';
     shortUrl.href = data.shortUrl;
     shortUrl.textContent = data.shortUrl;
     result.hidden = false;

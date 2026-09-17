@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import AnyHttpUrl, BaseModel
 
@@ -123,22 +123,40 @@ async def homepage() -> FileResponse:
     return FileResponse(BASE_DIR / "public" / "index.html")
 
 
-@app.post("/api/links", status_code=201)
-async def create_link(payload: LinkRequest, request: Request) -> dict:
+@app.post("/api/links", status_code=201, response_model=None)
+async def create_link(payload: LinkRequest, request: Request) -> dict | JSONResponse:
     check_create_link_rate_limit(request)
     async with links_lock:
         links = await read_links()
+        requested_url = str(payload.url)
+        existing_link = next(
+            ((code, link) for code, link in links.items() if link["url"] == requested_url),
+            None,
+        )
+        base_url = PUBLIC_URL or str(request.base_url).rstrip("/")
+
+        if existing_link is not None:
+            code, _ = existing_link
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "code": code,
+                    "shortUrl": f"{base_url}/{code}",
+                    "existing": True,
+                    "message": "Link já existente",
+                },
+            )
+
         code = create_code()
         while code in links:
             code = create_code()
         links[code] = {
-            "url": str(payload.url),
+            "url": requested_url,
             "createdAt": datetime.now(timezone.utc).isoformat(),
             "clicks": 0,
         }
         await write_links(links)
 
-    base_url = PUBLIC_URL or str(request.base_url).rstrip("/")
     return {"code": code, "shortUrl": f"{base_url}/{code}"}
 
 
