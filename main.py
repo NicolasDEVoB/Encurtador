@@ -1,13 +1,13 @@
-import asyncio
-import json
-import os
-import secrets
-import sqlite3
-import string
-import time
-from collections import defaultdict, deque
+import asyncio  # Biblioteca para programação assíncrona (permite que execute várias coisas ao mesmo tempo sem travar)
+import os # Permite interagir com o sistema operacional, como acessar variáveis de ambiente e manipular arquivos
+import secrets # Serve para criar códigos aleatórios curtos como os da url encurtada
+import sqlite3 # Biblioteca padrão do python para trabalhar com sqlite3
+import string # Dá o alfabeto base para criação dos códigos encurtados
+import time # Biblioteca para medir o tempo e controlar o ratelimit de requisições
+from collections import defaultdict, deque # 
 from datetime import datetime, timezone
 from pathlib import Path
+#import json # Serve para trabalhar com json
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
@@ -46,6 +46,8 @@ def initialize_database() -> None:
             )
             """
         )
+"""
+Função para ler os dados legados (Não tem mais uso)
 
         link_count = connection.execute("SELECT COUNT(*) FROM links").fetchone()[0]
         if link_count == 0 and LEGACY_LINKS_FILE.exists():
@@ -57,7 +59,7 @@ def initialize_database() -> None:
                     for code, link in legacy_links.items()
                 ],
             )
-
+"""
 
 async def read_links() -> dict:
     def read_from_database() -> dict:
