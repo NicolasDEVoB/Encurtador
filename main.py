@@ -4,15 +4,18 @@ import secrets # Serve para criar códigos aleatórios curtos como os da url enc
 import sqlite3 # Biblioteca padrão do python para trabalhar com sqlite3
 import string # Dá o alfabeto base para criação dos códigos encurtados
 import time # Biblioteca para medir o tempo e controlar o ratelimit de requisições
-from collections import defaultdict, deque # 
-from datetime import datetime, timezone
-from pathlib import Path
+from collections import defaultdict, deque # Para criar dicionários que já têm valor padrão & deque é uma fila de dados, ótima para controlar requisições em sequência.
+# Isso é usado para controlar o rate limit por IP.
+from datetime import datetime, timezone # Usado para gerar data e hora e a segunda importação é de uma biblioteca é para colocar a data em formato UTC
+from pathlib import Path # Serve para trabalhar com caminhos de arquivos
 #import json # Serve para trabalhar com json
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from pydantic import AnyHttpUrl, BaseModel
+from fastapi import FastAPI, HTTPException, Request # Importa o fastAPI, lançar erros http, e o request tras informações da requisição, como IP do cliente
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse # serve um arquivo como resposta HTTP, JSONResponse = retorna JSON manualmente, com status customizado.
+#RedirectResponse = redireciona o navegador para outra URL.
+
+from fastapi.staticfiles import StaticFiles # Permite servir arquivos estáticos, como CSS, JS e imagens.
+from pydantic import AnyHttpUrl, BaseModel # O base model cria modelos de dados válidos, e o Anyhttpurl garante que a URL enviada seja válida
 
 
 BASE_DIR = Path(__file__).resolve().parent
